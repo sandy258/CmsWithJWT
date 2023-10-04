@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  mysqldb:
+    image: mysql
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - 3306:3306
+    networks:
+      - mynetwork
+  userservice:
+    depends_on:
+      - mysqldb
+    build: ./UserService
+    restart: on-failure
+    environment:
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/justtest?createDatabaseIfNotExist=true
+      - spring.datasource.username=root
+      - spring.datasource.password=root
+    ports:
+      - 8004:8004
+    networks:
+      - mynetwork
+
+            
+networks:
+  mynetwork:
+  
+ 
+
+      
